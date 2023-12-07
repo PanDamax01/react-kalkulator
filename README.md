@@ -4,7 +4,6 @@
 Najpierw sklonuj projekt z github:
 
     git clone git@github.com:josdejong/mathjs.git
-    cd mathjs
 
 Zainstaluj elementy projektu:
 
