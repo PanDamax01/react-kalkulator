@@ -118,7 +118,7 @@ function App() {
 				datahistory={datahistory}
 				onClick={handleViewHistory}
 			/>
-			<div className='calc__display'>{displayValue}</div>
+			<p className='calc__display'>{displayValue}</p>
 			<div className='calc__box'>
 				{CalculatorButtons.map((button, index) => {
 					return (
