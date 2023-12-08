@@ -17,7 +17,3 @@ export function CalcHistory({ viewHistory, datahistory, onClick }) {
 		</>
 	)
 }
-
-// <li key={index}>
-// 	{li.displayValue} = <b>{li.result}</b>
-// </li>
