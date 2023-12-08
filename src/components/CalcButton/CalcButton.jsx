@@ -1,6 +1,6 @@
-import './Button.scss'
+import './CalcButton.scss'
 
-export function Button({ className, children, onClick }) {
+export function CalcButton({ className, children, onClick }) {
 	return (
 		<button className={className} onClick={onClick}>
 			{children}

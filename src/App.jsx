@@ -3,10 +3,13 @@ import { convertX } from './utils/convertX.js'
 import { shouldSkipOperation } from './utils/shouldSkipOperation.js'
 import { useState } from 'react'
 import './App.scss'
-import { Button } from './components/Button/Button'
+import { CalcButton } from './components/CalcButton/CalcButton'
+import { CalcHistory } from './components/CalcHistory/CalcHistory'
 
 function App() {
 	const [displayValue, setDisplayValue] = useState('')
+	const [viewHistory, setViewHistory] = useState(false)
+	const [datahistory, setDataHistory] = useState([])
 
 	const CalculatorButtons = [
 		{
@@ -73,10 +76,6 @@ function App() {
 	}
 
 	function handleOperationClick(e) {
-		// if (displayValue.length === 0 && ops.includes(e.target.textContent) && e.target.textContent !== '-') return
-		// if(displayValue[0] === '-' && displayValue.length === 1) return
-		// if (e.target.textContent === '.' && /\.\d+$/.test(displayValue)) return
-		// if (displayValue.length >= 18) return
 		if (shouldSkipOperation(displayValue, e.target.textContent, ops)) return
 
 		if (ops.includes(displayValue.slice(-1))) {
@@ -97,26 +96,38 @@ function App() {
 		if (displayValue.includes('/0') && !displayValue.includes('/0.')) {
 			return setDisplayValue('Nie dziel przez zero')
 		}
-    
-		setDisplayValue(evaluate(convertX(displayValue)).toString())
+
+		const result = evaluate(convertX(displayValue)).toString()
+		const operation = {displayValue, result}
+		setDataHistory(prevHistory => [...prevHistory, operation])
+		setDisplayValue(result)
 	}
 
 	function handleClearClick() {
 		setDisplayValue('')
 	}
 
+	function handleViewHistory() {
+		setViewHistory((prev) => !prev)
+	}
+
 	return (
 		<div className='calc'>
+			<CalcHistory
+				viewHistory={viewHistory}
+				datahistory={datahistory}
+				onClick={handleViewHistory}
+			/>
 			<div className='calc__display'>{displayValue}</div>
 			<div className='calc__box'>
 				{CalculatorButtons.map((button, index) => {
 					return (
-						<Button
+						<CalcButton
 							key={index}
 							className={button.className}
 							onClick={button.onClick}>
 							{button.value}
-						</Button>
+						</CalcButton>
 					)
 				})}
 			</div>
