@@ -10,6 +10,7 @@ function App() {
 	const [displayValue, setDisplayValue] = useState('')
 	const [viewHistory, setViewHistory] = useState(false)
 	const [datahistory, setDataHistory] = useState([])
+	const [resultCalculated, setResultCalculated] = useState(false);
 
 	const CalculatorButtons = [
 		{
@@ -72,7 +73,13 @@ function App() {
 
 	function handleNumberClick(e) {
 		if (displayValue.length >= 18) return
-		setDisplayValue((prevValue) => prevValue + e.target.textContent)
+
+		if (resultCalculated) {
+			setDisplayValue(e.target.textContent)
+			setResultCalculated(false)
+		} else {
+			setDisplayValue((prevValue) => prevValue + e.target.textContent)
+		}
 	}
 
 	function handleOperationClick(e) {
@@ -81,9 +88,10 @@ function App() {
 		if (ops.includes(displayValue.slice(-1))) {
 			setDisplayValue(
 				(prevValue) => prevValue.slice(0, -1) + e.target.textContent
-			)
-		} else {
-			handleNumberClick(e)
+				)
+			} else {
+			setResultCalculated(false)
+			setDisplayValue((prevValue) => prevValue + e.target.textContent)
 		}
 	}
 
@@ -98,9 +106,10 @@ function App() {
 		}
 
 		const result = evaluate(convertX(displayValue)).toString()
-		const operation = {displayValue, result}
-		setDataHistory(prevHistory => [...prevHistory, operation])
+		const operation = { displayValue, result }
+		setDataHistory((prevHistory) => [...prevHistory, operation])
 		setDisplayValue(result)
+		setResultCalculated(true)
 	}
 
 	function handleClearClick() {
