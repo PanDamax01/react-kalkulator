@@ -7,6 +7,7 @@ export function shouldSkipOperation(displayValue, buttonText, ops) {
 			buttonText !== '-') ||
 		(displayValue[0] === '-' && displayValue.length === 1) ||
 		(buttonText === '.' && dotRegex.test(displayValue)) ||
-		displayValue.length >= 18
+		displayValue.length >= 18 ||
+		!displayValue[displayValue.length - 1].match(/\d/) && buttonText === '.'
 	)
 }

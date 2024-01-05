@@ -3,15 +3,14 @@ import { convertX } from './utils/convertX.js'
 import { shouldSkipOperation } from './utils/shouldSkipOperation.js'
 import { useState } from 'react'
 import './App.scss'
-import { CalcButton } from './components/CalcButton/CalcButton'
 import { CalcHistory } from './components/CalcHistory/CalcHistory'
 
 function App() {
 	const [displayValue, setDisplayValue] = useState('')
 	const [viewHistory, setViewHistory] = useState(false)
-	const [datahistory, setDataHistory] = useState([])
-	const [resultCalculated, setResultCalculated] = useState(false);
-
+	const [dataHistory, setDataHistory] = useState([])
+	const [resultCalculated, setResultCalculated] = useState(false)
+	
 	const CalculatorButtons = [
 		{
 			value: 'C',
@@ -72,6 +71,7 @@ function App() {
 	const ops = ['^', '%', '/', 'x', '+', '-', '.']
 
 	function handleNumberClick(e) {
+		console.log(displayValue[displayValue.length - 1]);
 		if (displayValue.length >= 18) return
 
 		if (resultCalculated) {
@@ -88,8 +88,8 @@ function App() {
 		if (ops.includes(displayValue.slice(-1))) {
 			setDisplayValue(
 				(prevValue) => prevValue.slice(0, -1) + e.target.textContent
-				)
-			} else {
+			)
+		} else {
 			setResultCalculated(false)
 			setDisplayValue((prevValue) => prevValue + e.target.textContent)
 		}
@@ -106,7 +106,7 @@ function App() {
 		}
 
 		const result = evaluate(convertX(displayValue)).toString()
-		const operation = { displayValue, result }
+		const operation = { displayValue, result, id: Date.now() }
 		setDataHistory((prevHistory) => [...prevHistory, operation])
 		setDisplayValue(result)
 		setResultCalculated(true)
@@ -116,27 +116,27 @@ function App() {
 		setDisplayValue('')
 	}
 
-	function handleViewHistory() {
+	function handleHistoryToggle() {
 		setViewHistory((prev) => !prev)
 	}
 
 	return (
 		<div className='calc'>
 			<CalcHistory
-				viewHistory={viewHistory}
-				datahistory={datahistory}
-				onClick={handleViewHistory}
+				isHistoryShown={viewHistory}
+				dataHistory={dataHistory}
+				onClick={handleHistoryToggle}
 			/>
 			<p className='calc__display'>{displayValue}</p>
 			<div className='calc__box'>
-				{CalculatorButtons.map((button, index) => {
+				{CalculatorButtons.map((button) => {
 					return (
-						<CalcButton
-							key={index}
+						<button
+							key={button.value}
 							className={button.className}
 							onClick={button.onClick}>
 							{button.value}
-						</CalcButton>
+						</button>
 					)
 				})}
 			</div>

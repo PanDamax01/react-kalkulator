@@ -1,16 +1,19 @@
 import './CalcHistory.scss'
 import { CalcHistoryLi } from '../CalcHistoryLi/CalcHistoryLi'
 
-export function CalcHistory({ viewHistory, datahistory, onClick }) {
+export function CalcHistory({ isHistoryShown, dataHistory, onClick }) {
+
 	return (
 		<>
 			<button onClick={onClick} className='calc__btn--history'>
 				Historia
 			</button>
-			{viewHistory && (
+
+			{isHistoryShown && (
 				<ul className='calc__list'>
-					{datahistory.map((item, index) => {
-						return <CalcHistoryLi key={index} value={item}/>
+					{dataHistory.map((operation) => {
+						const key = `${operation.id}-${operation.displayValue}`
+						return <CalcHistoryLi key={key} value={operation} />
 					})}
 				</ul>
 			)}
